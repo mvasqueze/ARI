@@ -9,13 +9,15 @@
 
 ## Ingesta de datos y Almacenamiento
 
-ingesta de datos por medio de aws clo
+La ingesta de datos se realizo por medio de aws cli
 
-usamos el comando aws s3 cp 
+Usamos el comando aws s3 cp 
 
 ```
-"C:\Users\Lenovo\Visual\ARI - 2024\ARI\Trabajo1\Datasets\Raw" s3://climate-change-datalake/Raw --recursive (el --recursive toma todos los archivos y carpetas a partir de /Raw)
+"C:\Users\Lenovo\Visual\ARI - 2024\ARI\Trabajo1\Datasets\Raw" s3://climate-change-datalake/Raw --recursive 
 ```
+
+> el --recursive toma todos los archivos y carpetas a partir de /Raw
 
 ![alt text](Img/image.png)
 
