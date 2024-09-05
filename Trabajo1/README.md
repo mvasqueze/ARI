@@ -37,3 +37,8 @@ Se hizo un proceso de limpieza editando algunos nombres de columnas en los difer
 
 ![alt text](Img/image-2.png)
 
+Resultado
+
+![alt text](Img/image-3.png)
+
+
