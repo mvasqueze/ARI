@@ -17,12 +17,12 @@ usamos el comando aws s3 cp
 "C:\Users\Lenovo\Visual\ARI - 2024\ARI\Trabajo1\Datasets\Raw" s3://climate-change-datalake/Raw --recursive (el --recursive toma todos los archivos y carpetas a partir de /Raw)
 ```
 
-![alt text](image.png)
+![alt text](Trabajo1/Img/image.png)
 
 
 AWS
 
-![alt text](image-1.png)
+![alt text](Trabajo1/Img/image-1.png)
 
 ## ETL
 
