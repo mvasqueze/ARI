@@ -28,3 +28,12 @@ AWS
 
 ## ETL
 
+Creamos en Glue el crawler con las siguientes especificaciones
+
+- especificaciones
+
+
+Se hizo un proceso de limpieza editando algunos nombres de columnas en los diferentes datasets
+
+![alt text](Img/image-2.png)
+
