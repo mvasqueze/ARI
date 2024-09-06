@@ -9,19 +9,19 @@
 
 ## Ingesta de datos y Almacenamiento
 
-La ingesta de datos se realizo por medio de aws cli
-
-Usamos el comando aws s3 cp 
-
-```
-"C:\Users\Lenovo\Visual\ARI - 2024\ARI\Trabajo1\Datasets\Raw" s3://climate-change-datalake/Raw --recursive 
-```
-
-> el --recursive toma todos los archivos y carpetas a partir de /Raw
-
-![alt text](Img/image.png)
+La ingesta de datos se realizo por medio de scripts de python
 
 
+![alt text](Img/image-4.png)
+
+
+con el archivo xml tuvimos que descomprimirlo y luego subirlo 
+
+![alt text](Img/image-5.png)
+
+con el dataset descargado de kaggle tuvimos que agregar un token para poder hacer la descarga 
+
+![alt text](Img/image-6.png)
 AWS
 
 ![alt text](Img/image-1.png)
@@ -41,4 +41,9 @@ Resultado
 
 ![alt text](Img/image-3.png)
 
+
+### ETLs AWS GLUE hacia zona RAW
+
+
+ETL_SEA_LEVEL_CHANGE
 
