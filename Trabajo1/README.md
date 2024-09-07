@@ -73,7 +73,7 @@ Luego tener correctamente los datos en la zona RAW, construimos y ejecutamos los
 - Language: Python 3
 - Worker type: G 1X
 
-Se corrieron los respectivos Scripts [Trabajo1\AWS ETL GLUE TRUSTED], su status para cada dataset termino en Succeeded y luego de esto en nuestra base de datos se crean la siguientes Tables
+Se corrieron los respectivos [Scripts](https://github.com/mvasqueze/ARI/tree/main/Trabajo1/AWS%20ETL%20GLUE%20TRUSTED), su status para cada dataset termino en Succeeded y luego de esto en nuestra base de datos se crean la siguientes Tables
 
 ![alt text](Img/image-8.png)
 
