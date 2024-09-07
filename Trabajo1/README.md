@@ -5,7 +5,7 @@
 - [Climate Change Indicators](https://www.kaggle.com/datasets/tarunrm09/climate-change-indicators?select=climate_change_indicators.csv)
 - [Climate Change Video Set / NASA](https://www.kaggle.com/datasets/brsdincer/climate-change-video-set-nasa)
 - [Global Average Absolute Sea Level Change, 1880-2014](https://datahub.io/core/sea-level-rise#data)
-- [Green Domain](https://www.thegreenwebfoundation.org/tools/green-web-dataset/)
+- [CO2 Emissions](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC)
 
 ## Ingesta de datos y Almacenamiento
 
@@ -28,7 +28,10 @@ Fuentes de datos y ubicación en S3:
 
 Para uno de los datasets, recibimos los datos en un archivo comprimido en formato ZIP, el cual contenía un archivo XML. Para poder trabajar con este archivo, descomprimimos y luego subimos a la zona RAW del data lake.
 
+En la creacion de la tabla se veia un formato UNKNOWN por lo que en el script de python decidimos extraer los datos y convertirlos en formato csv 
+
 ![alt text](Img/image-5.png)
+
 
 Con dos de los datasets, estos fueron descargado desde la plataforma Kaggle, para lo cual fue necesario agregar un token de autenticación debido a las restricciones de acceso a los datos.
 
@@ -57,6 +60,19 @@ Resultado
 ![alt text](Img/image-3.png)
 
 
-### ETLs AWS GLUE hacia zona RAW
+### ETLs AWS GLUE hacia zona Trusted
+
+Luego tener correctamente los datos en la zona RAW, corrimos los scripts necesarios en la seccion de ETL JOBS 
+
+- Nombre del ETL JOBS: rawtotrusted
+- Se corrieron los respectivos Scripts, su status para cada dataset termino en Succeeded y luego de esto en nuestra base de datos se crean la siguientes Tables
+
+![alt text](Img/image-8.png)
+
+
+
+>[!IMPORTANT]
+>En el contexto de este proyecto, se tomó la decisión inicial de trabajar con datos no estructurados, como archivos de video, para capturar diversas fuentes de información sobre el cambio climático. Sin embargo, después de evaluar las complejidades inherentes al manejo de este tipo de datos, se ha decidido proceder con datos estructurados en formato CSV por las diferentes razones.
+
 
 
