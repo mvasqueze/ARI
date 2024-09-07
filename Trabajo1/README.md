@@ -13,25 +13,23 @@ La ingesta de los datos hacia la zona RAW del Data Lake fue realizada utilizando
 
 **Fuentes de datos y ubicación en S3:**
 - climate_change_indicators_83cc632aa7b85365d4cd8a18b81dc435
-    > Ubicación en S3: s3://climate-change-datalake/Raw/Climate-Change-Indicators/
+    > **Ubicación en S3:** s3://climate-change-datalake/Raw/Climate-Change-Indicators/
 
 - climate_change_videos
-    > Ubicación en S3: s3://climate-change-datalake/Raw/Climate-change-videos/
+    > **Ubicación en S3:** s3://climate-change-datalake/Raw/Climate-change-videos/
 
 - co2_emissions
-    > Ubicación en S3: s3://climate-change-datalake/Raw/CO2-Emissions/
+    > **Ubicación en S3:** s3://climate-change-datalake/Raw/CO2-Emissions/
 
 - sea_level_change
-    > Ubicación en S3: s3://climate-change-datalake/Raw/Sea-level-change/
+    > **Ubicación en S3:** s3://climate-change-datalake/Raw/Sea-level-change/
 
-![alt text](Img/image-4.png)
 
 Para uno de los datasets, recibimos los datos en un archivo comprimido en formato ZIP, el cual contenía un archivo XML. Para poder trabajar con este archivo, descomprimimos y luego subimos a la zona RAW del data lake.
 
 En la creacion de la tabla se veia un formato UNKNOWN por lo que en el script de python decidimos extraer los datos y convertirlos en formato csv 
 
 ![alt text](Img/image-5.png)
-
 
 Con dos de los datasets, estos fueron descargado desde la plataforma Kaggle, para lo cual fue necesario agregar un token de autenticación debido a las restricciones de acceso a los datos.
 
@@ -49,11 +47,11 @@ Todos los datos se almacenan en la zona RAW del Data Lake, ubicada en el bucket 
 
 ### AWS Crawler
 
-Creamos en Glue Crawler con las siguientes especificaciones
+Creamos en AWS Glue Crawler con las siguientes especificaciones
 
 ![alt text](Img/image-9.png)
 
-Se hizo un proceso de limpieza editando algunos nombres de columnas en los diferentes datasets
+Se hizo un proceso de limpieza manual editando algunos nombres de columnas en los diferentes datasets
 
 ![alt text](Img/image-2.png)
 
@@ -64,7 +62,7 @@ Resultado
 
 ### ETL AWS GLUE hacia zona Trusted
 
-Luego tener correctamente los datos en la zona RAW, corrimos los scripts necesarios en la seccion de ETL JOBS 
+Luego tener correctamente los datos en la zona RAW, construimos y ejecutamos los scripts necesarios en la seccion de ETL JOBS. 
 
 
 **Especificaciones:**
@@ -75,7 +73,7 @@ Luego tener correctamente los datos en la zona RAW, corrimos los scripts necesar
 - Language: Python 3
 - Worker type: G 1X
 
-Se corrieron los respectivos Scripts, su status para cada dataset termino en Succeeded y luego de esto en nuestra base de datos se crean la siguientes Tables
+Se corrieron los respectivos Scripts [Trabajo1\AWS ETL GLUE TRUSTED], su status para cada dataset termino en Succeeded y luego de esto en nuestra base de datos se crean la siguientes Tables
 
 ![alt text](Img/image-8.png)
 
