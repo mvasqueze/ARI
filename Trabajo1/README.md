@@ -25,13 +25,13 @@ La ingesta de los datos hacia la zona RAW del Data Lake fue realizada utilizando
     > **Ubicación en S3:** s3://climate-change-datalake/Raw/Sea-level-change/
 
 
-Para uno de los datasets, recibimos los datos en un archivo comprimido en formato ZIP, el cual contenía un archivo XML. Para poder trabajar con este archivo, descomprimimos y luego subimos a la zona RAW del data lake.
+Para uno de los datasets (**CO2_emissions**), recibimos los datos en un archivo comprimido en formato ZIP, el cual contenía un archivo XML. Para poder trabajar con este archivo, descomprimimos y luego subimos a la zona RAW del data lake.
 
 En la creacion de la tabla se veia un formato UNKNOWN por lo que en el script de python decidimos extraer los datos y convertirlos en formato csv 
 
 ![alt text](Img/image-5.png)
 
-Con dos de los datasets, estos fueron descargado desde la plataforma Kaggle, para lo cual fue necesario agregar un token de autenticación debido a las restricciones de acceso a los datos.
+Con dos de los datasets (**climate_change_indicators - climate_change_videos**), estos fueron descargado desde la plataforma Kaggle, para lo cual fue necesario agregar un token de autenticación debido a las restricciones de acceso a los datos.
 
 ![alt text](Img/image-6.png)
 
