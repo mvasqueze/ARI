@@ -11,7 +11,7 @@
 
 La ingesta de los datos hacia la zona RAW del Data Lake fue realizada utilizando scripts de Python que descargaron datasets desde diferentes fuentes. Estos datos fueron posteriormente almacenados en la ruta S3 correspondiente a la zona RAW.
 
-Fuentes de datos y ubicación en S3:
+**Fuentes de datos y ubicación en S3:**
 - climate_change_indicators_83cc632aa7b85365d4cd8a18b81dc435
     > Ubicación en S3: s3://climate-change-datalake/Raw/Climate-Change-Indicators/
 
@@ -47,9 +47,11 @@ Todos los datos se almacenan en la zona RAW del Data Lake, ubicada en el bucket 
 
 ## ETL
 
-Creamos en Glue el crawler con las siguientes especificaciones
+### AWS Crawler
 
-- especificaciones
+Creamos en Glue Crawler con las siguientes especificaciones
+
+![alt text](Img/image-9.png)
 
 Se hizo un proceso de limpieza editando algunos nombres de columnas en los diferentes datasets
 
@@ -60,12 +62,20 @@ Resultado
 ![alt text](Img/image-3.png)
 
 
-### ETLs AWS GLUE hacia zona Trusted
+### ETL AWS GLUE hacia zona Trusted
 
 Luego tener correctamente los datos en la zona RAW, corrimos los scripts necesarios en la seccion de ETL JOBS 
 
+
+**Especificaciones:**
 - Nombre del ETL JOBS: rawtotrusted
-- Se corrieron los respectivos Scripts, su status para cada dataset termino en Succeeded y luego de esto en nuestra base de datos se crean la siguientes Tables
+- AM Role: LabRole
+- Type: Spark
+- Glue version: Glue 4.0 - Supports spark 3.3, Scala 2, Python 3
+- Language: Python 3
+- Worker type: G 1X
+
+Se corrieron los respectivos Scripts, su status para cada dataset termino en Succeeded y luego de esto en nuestra base de datos se crean la siguientes Tables
 
 ![alt text](Img/image-8.png)
 
@@ -75,4 +85,9 @@ Luego tener correctamente los datos en la zona RAW, corrimos los scripts necesar
 >En el contexto de este proyecto, se tomó la decisión inicial de trabajar con datos no estructurados, como archivos de video, para capturar diversas fuentes de información sobre el cambio climático. Sin embargo, después de evaluar las complejidades inherentes al manejo de este tipo de datos, se ha decidido proceder con datos estructurados en formato CSV por las diferentes razones.
 
 
+## AWS EMR - Apache Spark
 
+## Consultas 
+
+
+### AWS Athena
