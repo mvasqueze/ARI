@@ -250,7 +250,7 @@ sql_query = """
  ```
 
 
-> [!IMPORTANT]
+> [!NOTE]
 > Para evidenciar la congruencia entre las consultas de Hive y Jupyter-Spark, se realiza el mismo query entre Climate_change_indicators y co2_emissions que se hizo en hive
 
 ![Creación de EMR](Img/image-29.png)
