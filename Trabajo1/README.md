@@ -52,7 +52,7 @@ Se definieron las siguientes zonas:
 
 Los datos fueron organizados y almacenados en S3 siguiendo una estructura jerárquica:
 
-s3://climate-change-datalake/ ├── Raw/ │ ├── Climate-Change-Indicators/ │ ├── Climate-change-videos/ │ ├── CO2-Emissions/ │ └── Sea-level-change/ ├── Trusted/ └── Curated/
+```s3://climate-change-datalake/Raw/```
 
 ![Estructura de Almacenamiento](Img/image-1.png)
 
