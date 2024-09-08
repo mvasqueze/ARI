@@ -130,7 +130,7 @@ Una vez que los datos estuvieron catalogados, se usó Athena para realizar consu
 
 ![alt text](Img/image-10.png)
 
-- **Consulta 3:** Consulta 3: Extrae datos sobre el nivel del mar ajustado por CSIRO y NOAA para el rango de años de 2000 a 2010, ordenados por año.
+- **Consulta 3:** Extrae datos sobre el nivel del mar ajustado por CSIRO y NOAA para el rango de años de 2000 a 2010, ordenados por año.
 
 
     ```sql
