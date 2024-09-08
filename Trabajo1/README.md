@@ -8,17 +8,18 @@
 ## Estructura del Proyecto. 
 
 ```
-├───AWS ETL GLUE RAW
-├───AWS ETL GLUE TRUSTED
-│   └───Converted CSV
-├───Datasets
-│   └───Raw
-│       ├───Climate-change-indicators
-│       ├───Climate-change-videos
-│       ├───Green-domain
-│       └───Sea-level-change
-├───Img
-└───NOTEBOOKS
+├───Proyecto Integrador
+└───Trabajo1
+    ├───AWS ETL GLUE RAW
+    ├───AWS ETL GLUE TRUSTED
+    ├───Datasets
+    │   └───Raw
+    │       ├───Climate-change-indicators
+    │       ├───Climate-change-videos
+    │       ├───Green-domain
+    │       └───Sea-level-change
+    ├───Img
+    └───NOTEBOOKS
 ```
 
 ## 1. Fuentes de Datos y Preparación
@@ -105,7 +106,53 @@ Los scripts ejecutados se pueden encontrar en el repositorio [GitHub](https://gi
 > [!IMPORTANT]
 > En el contexto de este proyecto, se tomó la decisión inicial de trabajar con datos no estructurados, como archivos de video, para capturar diversas fuentes de información sobre el cambio climático. Sin embargo, después de evaluar las complejidades al manejo de este tipo de datos, se ha decidido proceder con datos estructurados en formato CSV por esta razon.
 
-## 5. Consultas y Modelado de Datos
+## 5. AWS EMR para Procesamiento con Spark
+
+### Creación del Clúster EMR
+
+Se creó un clúster EMR utilizando las especificaciones recomendadas por el profesor durante la clase.
+
+![Creación de EMR](Img/image-17.png)
+
+### Configuración de Conexiones
+
+Se abrieron los puertos necesarios para la conexión con los servicios de **Jupyter**, **Hive**, **Hadoop**, entre otros:
+
+![Configuración de EMR](Img/image-18.png)
+
+### Acceso a Hadoop y Hive
+
+- Se ingresó a **Hadoop** utilizando las credenciales proporcionadas por el docente.
+- Se accedió a **Hive**, en la base de datos `rawtotrust`.
+
+![Ingreso a EMR](Img/image-19.png)
+
+### Parcheo del HDFS
+
+El sistema de archivos **HDFS** fue parcheado para habilitar el almacenamiento temporal en el clúster:
+
+![HDFS](Img/image-20.png)
+
+### Query en Hive
+
+Dentro de la base de datos `trusted`, se ejecutaron varias consultas utilizando **Hive**. Una de las tablas exploradas fue la tabla **climate_change_indicators_trusted**.
+
+![Consulta en Hive](Img/image-21.png)
+![Query en Hive](Img/image-22.png)
+![Tabla en Hive](Img/image-23.png)
+
+También se realizó una consulta en la tabla **co2_emissions** para obtener datos relevantes sobre las emisiones de CO2.
+
+![Tabla co2_emissions en Hive](Img/image-24.png)
+
+### Query Cruzado en Hive 
+
+Se realizó un query para taer el indicador de cambio climático en cada país representado por el cambio de tempratura junto con la emisión de c02 de cada país en el año 2003
+
+![Query cruzado en Hive](Img/image-25.png)
+
+
+## 6. Consultas y Modelado de Datos
 
 ### Athena
 
@@ -218,6 +265,8 @@ Se accedió a **Jupyter** a través del enlace habilitado en la consola del clú
 
 En un nuevo notebook, se inicializó **Spark** para comenzar con el procesamiento de datos:
 
+- **Notebook**: `Trabajo1\NOTEBOOKS\jupyter-querys.ipynb`
+
 ![Inicialización con Spark](Img/image-27.png)
 
 #### Visualización de la Tabla `sea_level_trusted`
@@ -226,7 +275,7 @@ A continuación, se realizó una visualización de la tabla **sea_level_trusted*
 
 ![Tabla sea_level_trusted](Img/img-28.png)
 
-#### Visualización de la Tabla `CO2-emissions`
+#### Query `CO2-emissions`
 
 ```sql
 sql_query = """
@@ -249,53 +298,17 @@ sql_query = """
     result.show(truncate=False)
  ```
 
-
 > [!IMPORTANT]
 > Para evidenciar la congruencia entre las consultas de Hive y Jupyter-Spark, se realiza el mismo query entre Climate_change_indicators y co2_emissions que se hizo en hive
 
 ![Creación de EMR](Img/image-29.png)
 
-## 6. AWS EMR para Procesamiento con Spark
+#### Query `Sea_Level_Change`
 
-### Creación del Clúster EMR
+Finalmente se realizó un query sobre el dataset sea_level:
 
-Se creó un clúster EMR utilizando las especificaciones recomendadas por el profesor durante la clase.
+![Creación de EMR](Img/image-30.png)
 
-![Creación de EMR](Img/image-17.png)
+Resultado
 
-### Configuración de Conexiones
-
-Se abrieron los puertos necesarios para la conexión con los servicios de **Jupyter**, **Hive**, **Hadoop**, entre otros:
-
-![Configuración de EMR](Img/image-18.png)
-
-### Acceso a Hadoop y Hive
-
-- Se ingresó a **Hadoop** utilizando las credenciales proporcionadas por el docente.
-- Se accedió a **Hive**, en la base de datos `rawtotrust`.
-
-![Ingreso a EMR](Img/image-19.png)
-
-### Parcheo del HDFS
-
-El sistema de archivos **HDFS** fue parcheado para habilitar el almacenamiento temporal en el clúster:
-
-![HDFS](Img/image-20.png)
-
-### Consultas en Hive
-
-Dentro de la base de datos `trusted`, se ejecutaron varias consultas utilizando **Hive**. Una de las tablas exploradas fue la tabla **climate_change_indicators_trusted**.
-
-![Consulta en Hive](Img/image-21.png)
-![Query en Hive](Img/image-22.png)
-![Tabla en Hive](Img/image-23.png)
-
-También se realizó una consulta en la tabla **co2_emissions** para obtener datos relevantes sobre las emisiones de CO2.
-
-![Tabla co2_emissions en Hive](Img/image-24.png)
-
-### Query 
-
-Se realizó un query para taer el indicador de cambio climático en cada país representado por el cambio de tempratura junto con la emisión de c02 de cada país en el año 2003
-
-![Query cruzado en Hive](Img/image-25.png)
+![Creación de EMR](Img/image-31.png)
