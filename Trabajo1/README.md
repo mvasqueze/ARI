@@ -10,20 +10,20 @@
 ```
 ├───Proyecto Integrador
 └───Trabajo1
-    ├───AWS ETL GLUE RAW
-    ├───AWS ETL GLUE TRUSTED
-    ├───CONSULTAS
-    │   ├───Athena
-    │   ├───Hive
-    │   └───Redshift
-    ├───Datasets
+    ├───0 Datasets
     │   └───Raw
     │       ├───Climate-change-indicators
     │       ├───Climate-change-videos
     │       ├───Green-domain
     │       └───Sea-level-change
-    ├───Img
-    └───NOTEBOOKS
+    ├───1 AWS ETL GLUE RAW
+    ├───2 AWS ETL GLUE TRUSTED
+    ├───3 NOTEBOOKS
+    ├───4 CONSULTAS
+    │   ├───Athena
+    │   ├───Hive
+    │   └───Redshift
+    └───Img
 ```
 
 ## 1. Fuentes de Datos y Preparación
