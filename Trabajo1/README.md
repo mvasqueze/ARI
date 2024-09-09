@@ -104,7 +104,7 @@ Después de tener los datos correctamente en la zona RAW, se construyeron y ejec
 - **Lenguaje:** Python 3
 - **Tipo de Trabajador:** G.1X
 
-Los scripts ejecutados se pueden encontrar en el repositorio [GitHub](https://github.com/mvasqueze/ARI/tree/main/Trabajo1/AWS%20ETL%20GLUE%20TRUSTED), y su estatus para cada dataset terminó en "Succeeded". Luego de esto, se crearon las tablas correspondientes en nuestra base de datos.
+Los scripts ejecutados se pueden encontrar en el repositorio [GitHub](https://github.com/mvasqueze/ARI/tree/main/Trabajo1/2%20AWS%20ETL%20GLUE%20TRUSTED), y su estatus para cada dataset terminó en "Succeeded". Luego de esto, se crearon las tablas correspondientes en nuestra base de datos.
 ![ETL Job](Img/image-8.png)
 
 > [!IMPORTANT]
