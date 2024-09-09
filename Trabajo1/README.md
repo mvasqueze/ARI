@@ -12,6 +12,10 @@
 └───Trabajo1
     ├───AWS ETL GLUE RAW
     ├───AWS ETL GLUE TRUSTED
+    ├───CONSULTAS
+    │   ├───Athena
+    │   ├───Hive
+    │   └───Redshift
     ├───Datasets
     │   └───Raw
     │       ├───Climate-change-indicators
