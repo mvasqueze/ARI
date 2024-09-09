@@ -255,7 +255,7 @@ Después de construir ambas tablas (indicadores climáticos y emisiones de CO2),
 ![Consulta de Join](Img/image-16.png)
 
 
-#### Acceso a Jupyter en el Clúster EMR
+### Clúster EMR
 
 Se accedió a **Jupyter** a través del enlace habilitado en la consola del clúster EMR:
 
