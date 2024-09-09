@@ -127,7 +127,7 @@ Se abrieron los puertos necesarios para la conexión con los servicios de **Jupy
 ### Acceso a Hadoop y Hive
 
 - Se ingresó a **Hadoop** utilizando las credenciales proporcionadas por el docente.
-- Se accedió a **Hive**, en la base de datos `rawtotrust`.
+- Se accedió a **Hive**, en la base de datos `rawtotrusteddb`.
 
 ![Ingreso a EMR](Img/image-19.png)
 
