@@ -1,0 +1,6 @@
+pandas
+nltk
+tabulate
+scikit-learn
+sentence-transformers
+chromadb
