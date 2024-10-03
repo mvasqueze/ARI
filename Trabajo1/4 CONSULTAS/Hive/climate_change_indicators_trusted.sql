@@ -1,0 +1,1 @@
+SELECT * FROM 'rawtotrusteddb' .'climate_change_indicators_trusted' LIMIT 100;

@@ -1,0 +1,1 @@
+SELECT * FROM 'rawtotrusteddb' .'co2_emissions_trusted' LIMIT 100;
