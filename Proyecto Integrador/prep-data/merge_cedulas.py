@@ -1,0 +1,65 @@
+import pandas as pd
+import re
+from datetime import datetime
+from cedulas_duplicadas import find_duplicate_cedulas
+
+def fill_missing_info(duplicate_records, date_column):
+    # Sort by date in descending order to have the most recent row for each cédula first
+    duplicate_records = duplicate_records.sort_values(by=[date_column], ascending=False)
+    
+    # Group by 'extracted_cedula' to handle each duplicate separately
+    filled_records = []
+    
+    for cedula, group in duplicate_records.groupby('extracted_cedula'):
+        # Use the first (most recent) record as the base
+        most_recent_record = group.iloc[0].copy()
+        
+        # Identify columns with missing values in the most recent record
+        missing_columns = most_recent_record[most_recent_record.isnull()].index.tolist()
+        
+        # Track whether any changes are made
+        changes_made = False
+        original_row = most_recent_record[['extracted_cedula'] + missing_columns].copy()
+        
+        # Fill missing values from older records if there are missing columns
+        for _, row in group.iloc[1:].iterrows():
+            before_filling = most_recent_record[missing_columns].copy()
+            most_recent_record[missing_columns] = most_recent_record[missing_columns].combine_first(row[missing_columns])
+            after_filling = most_recent_record[missing_columns]
+            
+            # Check if any values were filled
+            if not before_filling.equals(after_filling):
+                changes_made = True
+        
+        # Print as a table only if changes were made
+        if changes_made:
+            filled_columns = [col for col in missing_columns if most_recent_record[col] is not None]
+            print(f"\nCédula: {cedula}")
+            
+            # Create a DataFrame to show before and after
+            comparison_df = pd.DataFrame({
+                "Before Filling": original_row,
+                "After Filling": most_recent_record[missing_columns]
+            })
+            
+            # Display the table with only relevant columns (cedula and filled columns)
+            print(comparison_df[['Before Filling', 'After Filling']])
+        
+        # Append the filled record to the results list
+        filled_records.append(most_recent_record)
+    
+    # Convert the list of filled records back into a DataFrame
+    filled_records_df = pd.DataFrame(filled_records)
+    
+    # Return the filled DataFrame
+    return filled_records_df
+
+
+if __name__ == "__main__":
+    file_path = "../pcd_0311.csv"
+    duplicates, duplicate_records, output_file = find_duplicate_cedulas(file_path)
+    filled_duplicate_records = fill_missing_info(duplicate_records, "Fecha de la encuesta")
+
+    # Display the filled records
+    print("\nFilled records:")
+    print(filled_duplicate_records)
