@@ -4,6 +4,22 @@ from datetime import datetime
 from cedulas_duplicadas import find_duplicate_cedulas
 
 def fill_missing_info(duplicate_records, date_column):
+    # Columns related to the caretaker to ignore
+    caretaker_columns = [
+        "Nombres y apellidos del cuidador", "Documento del Cuidador", 
+        "Parentezco del cuidador con la PcD", "Telefono del cuidador",
+        "Como cuidador ¿ha visto afectada su salud?", "¿De que manera?", 
+        "¿Ha visto limitadas sus posibilidades de ingreso economico?", 
+        "¿Por que?", "¿Ha recibido capacitacion como cuidador?", 
+        "Actividad Laboral del Cuidador", "Describa su emprendimiento",
+        "Hace parte del comite municipal de Discapacidad",
+        "Hace parte de alguna Organizacion/Asociacion de PcD",
+        "Como se llama la Organizacion/Asociacion", 
+        "Programas sociales en los que participa", 
+        "Cual o Cuales programas sociales", 
+        "A qué espacios de participación pertenece"
+    ]
+    
     # Sort by date in descending order to have the most recent row for each cédula first
     duplicate_records = duplicate_records.sort_values(by=[date_column], ascending=False)
     
@@ -14,8 +30,11 @@ def fill_missing_info(duplicate_records, date_column):
         # Use the first (most recent) record as the base
         most_recent_record = group.iloc[0].copy()
         
-        # Identify columns with missing values in the most recent record
-        missing_columns = most_recent_record[most_recent_record.isnull()].index.tolist()
+        # Identify columns with missing values in the most recent record, excluding caretaker columns
+        missing_columns = [
+            col for col in most_recent_record.index 
+            if pd.isnull(most_recent_record[col]) and col not in caretaker_columns
+        ]
         
         # Track whether any changes are made
         changes_made = False
@@ -56,7 +75,7 @@ def fill_missing_info(duplicate_records, date_column):
 
 
 if __name__ == "__main__":
-    file_path = "../pcd_0311.csv"
+    file_path = "../pcd_0411.csv"
     duplicates, duplicate_records, output_file = find_duplicate_cedulas(file_path)
     filled_duplicate_records = fill_missing_info(duplicate_records, "Fecha de la encuesta")
 

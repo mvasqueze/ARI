@@ -15,7 +15,7 @@ def find_duplicate_cedulas(file_path):
         row_str = ' '.join([str(val) for val in row.values])
         
         # Pattern to match "Cédula" or "Cédula de ciudadanía" followed by numbers
-        matches = re.finditer(r'Cédula(?:\s+de\s+ciudadanía)?\s+(\d[\d\.E\+]+)', row_str)
+        matches = re.finditer(r'Cedula(?:\s+de\s+ciudadania)?\s+(\d[\d\.E\+]+)', row_str)
         
         cedulas = []
         for match in matches:
@@ -54,7 +54,7 @@ def find_duplicate_cedulas(file_path):
 
 # Example usage
 if __name__ == "__main__":
-    file_path = "../pcd_0311.csv"  # Replace with your file path
+    file_path = "../pcd_0411.csv"  # Replace with your file path
     duplicates, duplicate_records, output_file = find_duplicate_cedulas(file_path)
     
     print("\nDuplicate cédulas found:")
