@@ -4,7 +4,7 @@ from datetime import datetime
 from cedulas_duplicadas import find_duplicate_cedulas
 
 def fill_missing_info(duplicate_records, date_column):
-    # Columns related to the caretaker to ignore
+    # Columns related to the caretaker to ignore if "Tiene cuidador" is "No"
     caretaker_columns = [
         "Nombres y apellidos del cuidador", "Documento del Cuidador", 
         "Parentezco del cuidador con la PcD", "Telefono del cuidador",
@@ -30,10 +30,16 @@ def fill_missing_info(duplicate_records, date_column):
         # Use the first (most recent) record as the base
         most_recent_record = group.iloc[0].copy()
         
-        # Identify columns with missing values in the most recent record, excluding caretaker columns
+        # Determine if caretaker columns should be ignored based on "Tiene cuidador"
+        if most_recent_record.get("Tiene cuidador") == "No":
+            columns_to_ignore = caretaker_columns
+        else:
+            columns_to_ignore = []
+        
+        # Identify columns with missing values in the most recent record, excluding columns_to_ignore
         missing_columns = [
             col for col in most_recent_record.index 
-            if pd.isnull(most_recent_record[col]) and col not in caretaker_columns
+            if pd.isnull(most_recent_record[col]) and col not in columns_to_ignore
         ]
         
         # Track whether any changes are made
@@ -75,7 +81,7 @@ def fill_missing_info(duplicate_records, date_column):
 
 
 if __name__ == "__main__":
-    file_path = "../pcd_0411.csv"
+    file_path = "../pcd_1211.csv"
     duplicates, duplicate_records, output_file = find_duplicate_cedulas(file_path)
     filled_duplicate_records = fill_missing_info(duplicate_records, "Fecha de la encuesta")
 
