@@ -44,7 +44,8 @@ def fill_missing_info(duplicate_records, date_column):
         
         # Track whether any changes are made
         changes_made = False
-        original_row = most_recent_record[['extracted_cedula'] + missing_columns].copy()
+        # Remove 'extracted_cedula' from the original_row copy to avoid printing it
+        original_row = most_recent_record[missing_columns].copy()
         
         # Fill missing values from older records if there are missing columns
         for _, row in group.iloc[1:].iterrows():
@@ -67,7 +68,7 @@ def fill_missing_info(duplicate_records, date_column):
                 "After Filling": most_recent_record[missing_columns]
             })
             
-            # Display the table with only relevant columns (cedula and filled columns)
+            # Display the table with only relevant columns (excluding 'extracted_cedula')
             print(comparison_df[['Before Filling', 'After Filling']])
         
         # Append the filled record to the results list
@@ -75,6 +76,7 @@ def fill_missing_info(duplicate_records, date_column):
     
     # Convert the list of filled records back into a DataFrame
     filled_records_df = pd.DataFrame(filled_records)
+    
     
     # Return the filled DataFrame
     return filled_records_df
@@ -87,4 +89,6 @@ if __name__ == "__main__":
 
     # Display the filled records
     print("\nFilled records:")
-    print(filled_duplicate_records)
+    print(filled_duplicate_records.columns)
+
+    

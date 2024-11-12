@@ -3,3 +3,4 @@
 /prep-data/*.csv
 /.env
 /*.csv
+*.pyc
