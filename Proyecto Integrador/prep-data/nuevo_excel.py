@@ -5,18 +5,18 @@ from cedulas_duplicadas import find_duplicate_cedulas
 from merge_cedulas import fill_missing_info
 
 def create_clean_csv(file_path, filled_duplicate_records, output_filename="clean_data.csv"):
-    # Read the original data
+    # Leer los datos originales
     original_data = pd.read_csv(file_path, dtype=str, low_memory=False, encoding='utf-8', sep=';')
 
-    # Filter out duplicate records by keeping only those not in 'filled_duplicate_records'
+    # Filtrar los registros duplicados manteniendo solo aquellos que no están en 'filled_duplicate_records'
     non_duplicates = original_data[~original_data['Numero de documento (PcD)'].isin(filled_duplicate_records['Numero de documento (PcD)'])]
     
-    # Combine the non-duplicate records with the filled duplicate records
+    # Combinar los registros no duplicados con los registros duplicados obtenidos después del merge
     clean_data = pd.concat([non_duplicates, filled_duplicate_records], ignore_index=True)
     
-    # Save the combined data to a new CSV file
+    # Guardar los datos combinados en un nuevo archivo CSV
     clean_data.to_csv(output_filename, index=False, encoding='utf-8')
-    print(f"Cleaned data saved to {output_filename}")
+    print(f"Datos limpiados guardados en {output_filename}")
 
 if __name__ == "__main__":
     file_path = "../pcd_1211.csv"

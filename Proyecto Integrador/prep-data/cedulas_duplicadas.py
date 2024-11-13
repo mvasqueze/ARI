@@ -3,49 +3,49 @@ import re
 from datetime import datetime
 
 def find_duplicate_cedulas(file_path):
-    # Read the CSV file with mixed types handling
+
+    # Leer el archivo CSV
     df = pd.read_csv(file_path,
                      delimiter=';', 
-                     dtype=str,  # Read all columns as strings to avoid mixed type issues
-                     low_memory=False,  # Prevent mixed type warnings
+                     dtype=str,  # Leer todas las columnas como strings
+                     low_memory=False,  # Prevenir advertencias
                      encoding='utf-8')
     
-    # Try using the exact name for the "Numero de documento (PcD)" column after confirming it
-    column_name = 'Numero de documento (PcD)'  # Adjust if needed based on printed output
+    # Se verifica que la columna "Numero de documento (PcD)", que se refiere a la PcD, se encuentre en el dataset.
+    column_name = 'Numero de documento (PcD)'  
     if column_name not in df.columns:
-        raise KeyError(f"Column '{column_name}' not found in the file. Please verify the column name.")
+        raise KeyError(f"Columna '{column_name}' no encontrada en el archivo. Por favor, verifique el nombre de la columna.")
     
-    # Directly use the correct column to find duplicates
+    # Si la columna existe, se establece como la que va a ser usada
     df['extracted_cedula'] = df[column_name]
     
-    # Identify duplicates
+    # Identificar duplicados: Se cuenta cuántas veces aparece una cédula y se agregan a la lista de duplicados aquellos que aparezcan más de una vez
     duplicates = df['extracted_cedula'].value_counts()
     duplicates = duplicates[duplicates > 1]
     
-    # Complete record of each duplicate
+    # Registro completo de cada duplicado: Se extraen los registros completos de las cédulas duplicadas
     duplicate_records = df[df['extracted_cedula'].isin(duplicates.index)]
     
-    # Generate output filename with timestamp
+    # Generar archivo nuevo con los registros duplicados
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_filename = f'listado_cedulas_duplicadas_{timestamp}.csv'
     
-    # Save duplicate records to CSV
     if len(duplicate_records) > 0:
         duplicate_records.to_csv(output_filename, index=False, encoding='utf-8')
-        print(f"\nDuplicate records have been saved to: {output_filename}")
+        print(f"\nLos registros duplicados han sido guardados en: {output_filename}")
     
     return duplicates, duplicate_records, output_filename
 
-# Example usage
+# Ejemplo de uso
 if __name__ == "__main__":
-    file_path = "../pcd_1211.csv"  # Replace with your file path
+    file_path = "../pcd_1211.csv"  # Reemplazar con la ruta de su archivo
     duplicates, duplicate_records, output_file = find_duplicate_cedulas(file_path)
     
-    print("\nDuplicate cédulas found:")
+    print("\nCédulas duplicadas encontradas:")
     if len(duplicates) > 0:
         print(duplicates)
-        print(f"\nNumber of duplicate records: {len(duplicate_records)}")
+        print(f"\nNúmero de registros duplicados: {len(duplicate_records)}")
     else:
-        print("No duplicate cédulas found")
+        print("No se encontraron cédulas duplicadas")
     
-    print(f"\nTotal records processed: {len(duplicate_records)}")
+    print(f"\nTotal de registros procesados: {len(duplicate_records)}")
