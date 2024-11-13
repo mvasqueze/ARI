@@ -18,6 +18,9 @@ def find_duplicate_cedulas(file_path):
     
     # Si la columna existe, se establece como la que va a ser usada
     df['extracted_cedula'] = df[column_name]
+
+    # Omitir los registros con cédula = 0
+    df = df[df['extracted_cedula'] != '0']
     
     # Identificar duplicados: Se cuenta cuántas veces aparece una cédula y se agregan a la lista de duplicados aquellos que aparezcan más de una vez
     duplicates = df['extracted_cedula'].value_counts()

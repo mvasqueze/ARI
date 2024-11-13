@@ -21,10 +21,12 @@ def fill_missing_info(duplicate_records, date_column):
     ]
     
     # Ordenar por fecha en orden descendente para tener la fila más reciente primero
+    duplicate_records[date_column] = pd.to_datetime(duplicate_records[date_column], errors='coerce')
     duplicate_records = duplicate_records.sort_values(by=[date_column], ascending=False)
     
     # Agrupar por 'extracted_cedula' para manejar cada duplicado por separado
     filled_records = []
+    
     
     for cedula, group in duplicate_records.groupby('extracted_cedula'):
         # Usar el primer (más reciente) registro como base
@@ -59,7 +61,6 @@ def fill_missing_info(duplicate_records, date_column):
         
         # Imprimir como tabla solo si se realizaron cambios
         if changes_made:
-            filled_columns = [col for col in missing_columns if most_recent_record[col] is not None]
             print(f"\nCédula: {cedula}")
             
             # Crear un DataFrame para mostrar antes y después
