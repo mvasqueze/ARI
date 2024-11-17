@@ -2,3 +2,5 @@ geopandas
 pandas
 shapely
 requests
+arcgis
+unidecode
