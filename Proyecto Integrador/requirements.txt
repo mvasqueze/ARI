@@ -4,3 +4,4 @@ shapely
 requests
 arcgis
 unidecode
+rapidfuzz

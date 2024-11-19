@@ -1,4 +1,5 @@
 from arcgis.features import FeatureLayer
+import pandas as pd
 
 def query_vereda(x, y):
     layer_url = "https://services5.arcgis.com/K90UQIB09TmTjUL8/arcgis/rest/services/Veredas_de_Antioquia/FeatureServer/3"
@@ -133,17 +134,17 @@ def query_vereda_coordinates(nombre_vereda):
                 # Calcular el centroide del polígono
                 rings = geometry['rings']
                 centroid = calculate_centroid(rings)
-                return centroid  # Devuelve coordenadas (x, y)
+                return True, centroid  # Devuelve coordenadas (x, y)
             else:
                 print("Geometría no encontrada")
-                return None
+                return False, None
         else:
             print("No se encontraron coincidencias")
-            return None
+            return False, None
         
     except Exception as e:
         print(f"Error al consultar la API de ArcGIS: {e}")
-        return None
+        return False, None
 
 # Método para consultar vereda usando el nombre y devolver coordenadas
 def query_municipio_coordinates(nombre_municipio):
@@ -197,31 +198,38 @@ def calculate_centroid(rings):
     centroid_y = sum(y_coords) / len(y_coords)
     return (centroid_x, centroid_y)
 
-import pandas as pd
-
-def identificar_zona_urbana(dataset):
-    columna_zona="Zona de residencia (PcD)"
-    if columna_zona not in dataset.columns:
-        raise ValueError(f"La columna '{columna_zona}' no existe en el dataset.")
+def identificar_zona_urbana(row, columna_zona="Zona de residencia (PcD)"):
+    """
+    Identifica si una fila corresponde a zona urbana
     
-    # Crear una nueva columna con True si es urbana y False si es rural
-    dataset["Es_Urbana"] = dataset[columna_zona].str.strip().str.lower() == "urbana"
+    Args:
+        row: Fila del DataFrame
+        columna_zona: Nombre de la columna que contiene la zona
     
-    return dataset
+    Returns:
+        bool: True si es urbana, False si no
+    """
+    if columna_zona not in row.index:
+        raise ValueError(f"La columna '{columna_zona}' no existe en la fila.")
+    
+    return row[columna_zona].strip().lower() == "urbana"
 
-# Ejemplo de uso
-file_path = "clean_pcd_data.csv"
-dataset = pd.read_csv(file_path, delimiter=";", dtype=str, encoding="utf-8")
-
-# Aplicar el método
-dataset_actualizado = identificar_zona_urbana(dataset)
-
-# Verificar las primeras filas
-print(dataset_actualizado[["Zona de residencia (PcD)", "Es_Urbana"]].head())
-
-# Guardar el dataset actualizado (opcional)
-dataset_actualizado.to_csv("clean_pcd_data_actualizado.csv", index=False, encoding="utf-8", sep=";")
-
+def dividir_por_zona(df, columna_zona="Zona de residencia (PcD)"):
+    """
+    Divide un DataFrame en dos basándose en la zona de residencia.
+    
+    Args:
+        df: DataFrame a dividir
+        columna_zona: Nombre de la columna que contiene la zona
+    """
+    # Aplicar la función de clasificación a todo el dataset
+    mask_urbana = df.apply(lambda row: identificar_zona_urbana(row, columna_zona), axis=1)
+    
+    # Dividir el dataset
+    df_urbano = df[mask_urbana]
+    df_rural = df[~mask_urbana]
+    
+    return df_urbano, df_rural
 
 # Ejemplo de uso
 '''nombre_vereda = "La Seca"
