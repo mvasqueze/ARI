@@ -1,5 +1,8 @@
 from arcgis.features import FeatureLayer
 import pandas as pd
+import math
+from arcgis.gis import GIS
+from arcgis.geocoding import reverse_geocode, geocode
 
 def query_vereda(x, y):
     layer_url = "https://services5.arcgis.com/K90UQIB09TmTjUL8/arcgis/rest/services/Veredas_de_Antioquia/FeatureServer/3"
@@ -55,11 +58,20 @@ def query_with_bbox(vereda_layer, x, y, offset=0.001):
     except Exception as e:
         return None
     
+def truncar_coordenada(coord):
+    numero_str = str(coord)
+    truncado = numero_str[:numero_str.find('.') + 3]
+    return float(truncado)
+
 def query_municipio(x, y):
+    """
+    Queries the municipio based on a point (x, y). If the point query fails, it falls back to a bounding box query.
+    """
     layer_url = "https://services5.arcgis.com/K90UQIB09TmTjUL8/arcgis/rest/services/Veredas_de_Antioquia/FeatureServer/3"
     vereda_layer = FeatureLayer(layer_url)
-    
-    # REST API style parameters (working method)
+
+    print(f"Querying coordinates: {x}, {y}")
+
     geom_params = {
         "geometryType": "esriGeometryPoint",
         "geometry": f"{x},{y}",
@@ -68,22 +80,33 @@ def query_municipio(x, y):
     }
     
     try:
+        # Query the layer with point geometry
         query_result = vereda_layer.query(
             where="1=1",
             out_fields="*",
             **geom_params
         )
         
-        if query_result.features:
-            print(query_result.features[0].attributes)
-            return query_result.features[0].attributes['NOMB_MPIO']
-        return None
+        # Debug output
+        print(f"Point Query Response: {query_result}")
         
+        if query_result.features:
+            print(f"Feature Attributes: {query_result.features[0].attributes}")
+            return query_result.features[0].attributes.get('NOMB_MPIO', None)
+        else:
+            print("No features found for the point query. Falling back to bounding box...")
+            return query_with_bbox_municipio(vereda_layer, x, y)
+
     except Exception as e:
-        # Fallback to bounding box method if point query fails
+        print(f"Point Query Error: {e}")
+        print("Falling back to bounding box query...")
         return query_with_bbox_municipio(vereda_layer, x, y)
 
+
 def query_with_bbox_municipio(vereda_layer, x, y, offset=0.001):
+    """
+    Queries the municipio using a bounding box around a point (x, y).
+    """
     bbox = {
         "xmin": x - offset,
         "ymin": y - offset,
@@ -93,6 +116,7 @@ def query_with_bbox_municipio(vereda_layer, x, y, offset=0.001):
     }
     
     try:
+        # Query the layer with bounding box geometry
         query_result = vereda_layer.query(
             where="1=1",
             out_fields="*",
@@ -101,12 +125,19 @@ def query_with_bbox_municipio(vereda_layer, x, y, offset=0.001):
             geometry_type="esriGeometryEnvelope"
         )
         
-        if query_result.features:
-            print(query_result.features[0].attributes)
-            return query_result.features[0].attributes['NOMB_MPIO']
-        return None
+        # Debug output
+        print(f"BBox Query Params: {bbox}")
+        print(f"BBox Query Response: {query_result}")
         
+        if query_result.features:
+            print(f"Feature Attributes: {query_result.features[0].attributes}")
+            return query_result.features[0].attributes.get('NOMB_MPIO', None)
+        else:
+            print("No features found for the bounding box query.")
+            return None
+
     except Exception as e:
+        print(f"BBox Query Error: {e}")
         return None
 
 
@@ -243,11 +274,97 @@ else:
     print("No se encontraron las coordenadas de la vereda especificada.")'''
 
 
+def reverse_geocode_municipio(x, y):
+    """
+    Perform reverse geocoding to determine the municipio for given coordinates.
+    
+    Args:
+        x (float): Longitude of the point.
+        y (float): Latitude of the point.
+
+    Returns:
+        str: The name of the municipio or a relevant message if not found.
+    """
+    # Initialize the GIS object (Anonymously connects to ArcGIS Online)
+    gis = GIS()
+    location = {"x": x, "y": y, "spatialReference": {"wkid": 4326}}
+    
+    print(f"Reverse geocoding coordinates: {x}, {y}")
+    
+    try:
+        # Perform reverse geocoding
+        result = reverse_geocode(location)
+        print(f"Reverse Geocode Result: {result}")
+        
+        # Extract the municipio or relevant field
+        address = result.get("address", {})
+        municipio = address.get("City", None) or address.get("Region", None)
+        
+        if municipio:
+            print(f"Found municipio: {municipio}")
+            return municipio
+        
+        print("Municipio not found in the reverse geocode result.")
+        return "Municipio not found"
+
+    except Exception as e:
+        print(f"Error in reverse geocoding: {e}")
+        return "Error in reverse geocoding"
+    
+def geocode_municipio(municipio_name):
+    """
+    Perform geocoding to determine the coordinates for a given municipio name.
+    
+    Args:
+        municipio_name (str): Name of the municipio to locate.
+
+    Returns:
+        tuple: (longitude, latitude) of the municipio or a relevant message if not found.
+    """
+    # Initialize the GIS object (Anonymously connects to ArcGIS Online)
+    gis = GIS()
+    
+    print(f"Geocoding municipio: {municipio_name}")
+    
+    try:
+        # Perform geocoding
+        municipio_name_ant = municipio_name + ", Antioquia, Colombia"
+        results = geocode(municipio_name)
+        print(f"Geocode Results: {results}")
+        
+        if results:
+            # Extract coordinates of the first result
+            location = results[0]["location"]
+            x, y = location["x"], location["y"]
+            print(f"Coordinates found: {x}, {y}")
+            return x, y
+        
+        print("Coordinates not found for the given municipio name.")
+        return "Coordinates not found", None
+
+    except Exception as e:
+        print(f"Error in geocoding: {e}")
+        return "Error in geocoding", None
+
+
 # Example usage
-x, y = -75.5310, 6.3013
+if __name__ == "__main__":
+    '''coords = [(-75.71, 6.11), (-75.42, 5.79)]
+    for coord in coords:
+        municipio = reverse_geocode_municipio(coord[0], coord[1])
+        print(f"Coordinates: {coord} -> Municipio: {municipio}")
+    '''
+    municipios = ["La esperanza"]
+    for municipio in municipios:
+        coords = geocode_municipio(municipio)
+        print(f"Municipio: {municipio} -> Coordinates: {coords}")
+
+'''# Example usage
+#x, y = -75.71035406, 6.11179751
+x, y =  -75.71, 6.11
 vereda_name = query_municipio(x, y)
 if vereda_name:
     print(f"Found vereda: {vereda_name}")
 else:
     print("No vereda found at these coordinates")
-
+'''

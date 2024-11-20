@@ -28,6 +28,12 @@ def agregar_columnas_normalizadas(ruta_dataset):
     # Retornar el DataFrame actualizado
     return original_df
 
+def get_municipio_normalizado(row):
+    return row["Municipio_normalizado"]
+
+def get_vereda_normalizada(row):
+    return row["BarrioVereda_normalizado"]
+
 # Método para verificar si el municipio pertenece al Área Metropolitana
 def verificar_area_metropolitana(row):
     # Nombres de los municipios del área metropolitana normalizados

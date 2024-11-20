@@ -1,6 +1,6 @@
 from rapidfuzz import fuzz
 
-def comparar_frases(frase1, frase2, umbral=70):
+def comparar_frases(frase1, frase2, umbral):
     """
     Compara dos frases y determina si su coincidencia es igual o superior al umbral.
     
@@ -18,9 +18,9 @@ def comparar_frases(frase1, frase2, umbral=70):
     puntaje = fuzz.ratio(frase1, frase2)
     return puntaje >= umbral
 
-# Ejemplo de uso
+'''# Ejemplo de uso
 frase1 = "El poblao"
 frase2 = "El Poblado"
 
 resultado = comparar_frases(frase1, frase2)
-print(f"Las frases son similares: {resultado}")
+print(f"Las frases son similares: {resultado}")'''

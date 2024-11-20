@@ -1,4 +1,5 @@
 /mcda
+/mcda2
 /prep-data/mcda
 /prep-data/*.csv
 /.env
