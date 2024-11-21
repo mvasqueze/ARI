@@ -7,7 +7,7 @@ def normalizar_texto(texto):
         return ""
     texto = unidecode(str(texto).lower())  # Convertir a minúsculas y eliminar tildes
     texto = texto.replace(",", "").replace(".", "")  # Quitar puntuaciones
-    palabras_irrelevantes = ["de", "la", "el", "las", "los", "vereda", "municipio"]  # Lista de palabras comunes
+    palabras_irrelevantes = ["de", "la", "el", "las", "los", "vereda", "municipio", "-"]  # Lista de palabras comunes
     texto = " ".join([palabra for palabra in texto.split() if palabra not in palabras_irrelevantes])
     return texto
 

@@ -24,7 +24,6 @@ def query_vereda(x, y):
         )
         
         if query_result.features:
-            print("API")
             return query_result.features[0].attributes['NOMBRE_VER']
         return None
         
@@ -70,6 +69,8 @@ def query_municipio(x, y):
     layer_url = "https://services5.arcgis.com/K90UQIB09TmTjUL8/arcgis/rest/services/Veredas_de_Antioquia/FeatureServer/3"
     vereda_layer = FeatureLayer(layer_url)
 
+    x = truncar_coordenada(x)
+    y = truncar_coordenada(y)
     print(f"Querying coordinates: {x}, {y}")
 
     geom_params = {
@@ -148,34 +149,29 @@ def query_vereda_coordinates(nombre_vereda):
     vereda_layer = FeatureLayer(layer_url)
     
     try:
-        # Parámetros para consulta por nombre
+        # Query the API
         query_result = vereda_layer.query(
             where=f"NOMBRE_VER LIKE '%{nombre_vereda}%'",
             out_fields="*",
-            return_geometry=True  # Necesitamos geometría para extraer coordenadas
+            return_geometry=True
         )
         
-        # Verificar si se encuentran resultados
         if query_result.features:
-            print("Consulta exitosa")
-            
-            # Obtener el polígono de la geometría del primer resultado
+            # Extract geometry and calculate centroid
             geometry = query_result.features[0].geometry
             if geometry and 'rings' in geometry:
-                # Calcular el centroide del polígono
                 rings = geometry['rings']
                 centroid = calculate_centroid(rings)
-                return True, centroid  # Devuelve coordenadas (x, y)
+                x, y = map(str, centroid)
+                return x, y  # Valid tuple
             else:
                 print("Geometría no encontrada")
-                return False, None
         else:
             print("No se encontraron coincidencias")
-            return False, None
-        
     except Exception as e:
         print(f"Error al consultar la API de ArcGIS: {e}")
-        return False, None
+    
+    return None, None  # Always return a tuple
 
 # Método para consultar vereda usando el nombre y devolver coordenadas
 def query_municipio_coordinates(nombre_municipio):
@@ -262,18 +258,6 @@ def dividir_por_zona(df, columna_zona="Zona de residencia (PcD)"):
     
     return df_urbano, df_rural
 
-# Ejemplo de uso
-'''nombre_vereda = "La Seca"
-nombre_municipio = "Bello"
-coordenadas = query_municipio_coordinates(nombre_municipio)
-
-if coordenadas:
-    #print(f"Coordenadas de la vereda '{nombre_vereda}': {coordenadas}")
-    print(f"Coordenadas del municipio '{nombre_municipio}': {coordenadas}")
-else:
-    print("No se encontraron las coordenadas de la vereda especificada.")'''
-
-
 def reverse_geocode_municipio(x, y):
     """
     Perform reverse geocoding to determine the municipio for given coordinates.
@@ -354,10 +338,23 @@ if __name__ == "__main__":
         municipio = reverse_geocode_municipio(coord[0], coord[1])
         print(f"Coordinates: {coord} -> Municipio: {municipio}")
     '''
-    municipios = ["La esperanza"]
+    '''municipios = ["La esperanza"]
     for municipio in municipios:
         coords = geocode_municipio(municipio)
-        print(f"Municipio: {municipio} -> Coordinates: {coords}")
+        print(f"Municipio: {municipio} -> Coordinates: {coords}")'''
+    
+        # Ejemplo de uso
+    nombre_vereda = "La Seca"
+    nombre_municipio = "Bello"
+    coordenadas = query_vereda_coordinates(nombre_municipio)
+
+    if coordenadas:
+        print(f"Coordenadas de la vereda '{nombre_vereda}': {coordenadas}")
+        #print(f"Coordenadas del municipio '{nombre_municipio}': {coordenadas}")
+    else:
+        print("No se encontraron las coordenadas de la vereda especificada.")
+    
+
 
 '''# Example usage
 #x, y = -75.71035406, 6.11179751
