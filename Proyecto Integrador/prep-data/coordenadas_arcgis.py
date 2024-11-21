@@ -173,41 +173,6 @@ def query_vereda_coordinates(nombre_vereda):
     
     return None, None  # Always return a tuple
 
-# Método para consultar vereda usando el nombre y devolver coordenadas
-def query_municipio_coordinates(nombre_municipio):
-    # URL de la capa de veredas en ArcGIS
-    layer_url = "https://services5.arcgis.com/K90UQIB09TmTjUL8/arcgis/rest/services/Veredas_de_Antioquia/FeatureServer/3"
-    vereda_layer = FeatureLayer(layer_url)
-    
-    try:
-        # Parámetros para consulta por nombre
-        query_result = vereda_layer.query(
-            where=f"NOMB_MPIO LIKE '%{nombre_municipio}%'",
-            out_fields="*",
-            return_geometry=True  # Necesitamos geometría para extraer coordenadas
-        )
-        
-        # Verificar si se encuentran resultados
-        if query_result.features:
-            print("Consulta exitosa")
-            
-            # Obtener el polígono de la geometría del primer resultado
-            geometry = query_result.features[0].geometry
-            if geometry and 'rings' in geometry:
-                # Calcular el centroide del polígono
-                rings = geometry['rings']
-                centroid = calculate_centroid(rings)
-                return centroid  # Devuelve coordenadas (x, y)
-            else:
-                print("Geometría no encontrada")
-                return None
-        else:
-            print("No se encontraron coincidencias")
-            return None
-        
-    except Exception as e:
-        print(f"Error al consultar la API de ArcGIS: {e}")
-        return None
 
 # Método para calcular el centroide a partir de los vértices del polígono
 def calculate_centroid(rings):
@@ -313,7 +278,7 @@ def geocode_municipio(municipio_name):
     try:
         # Perform geocoding
         municipio_name_ant = municipio_name + ", Antioquia, Colombia"
-        results = geocode(municipio_name)
+        results = geocode(municipio_name_ant)
         print(f"Geocode Results: {results}")
         
         if results:
@@ -330,6 +295,36 @@ def geocode_municipio(municipio_name):
         print(f"Error in geocoding: {e}")
         return "Error in geocoding", None
 
+def geocode_municipio_v2(nombre_municipio):
+    """
+    Retrieve the coordinates (x, y) for a given municipality name from a local CSV file.
+    
+    Args:
+        nombre_municipio (str): The name of the municipality.
+    
+    Returns:
+        tuple: Coordinates (x, y) if found, else None.
+    """
+    # Load the geocoded municipios data
+    geocoded_file = "geocoded_municipios.csv"  # Update with the correct path
+    geocoded_data = pd.read_csv(geocoded_file)
+
+    try:
+        # Filter the DataFrame for the matching municipio
+        match = geocoded_data[geocoded_data["Municipio"] == nombre_municipio]
+        
+        if not match.empty:
+            # Extract the first matching record's coordinates
+            x = match.iloc[0]["x"]
+            y = match.iloc[0]["y"]
+            return x, y
+        else:
+            print(f"No match found for municipio: {nombre_municipio}")
+            return None
+    except Exception as e:
+        print(f"Error retrieving coordinates for {nombre_municipio}: {e}")
+        return None
+
 
 # Example usage
 if __name__ == "__main__":
@@ -338,12 +333,12 @@ if __name__ == "__main__":
         municipio = reverse_geocode_municipio(coord[0], coord[1])
         print(f"Coordinates: {coord} -> Municipio: {municipio}")
     '''
-    '''municipios = ["La esperanza"]
+    municipios = ["alejandria"]
     for municipio in municipios:
         coords = geocode_municipio(municipio)
-        print(f"Municipio: {municipio} -> Coordinates: {coords}")'''
+        print(f"Municipio: {municipio} -> Coordinates: {coords}")
     
-        # Ejemplo de uso
+    '''    # Ejemplo de uso
     nombre_vereda = "La Seca"
     nombre_municipio = "Bello"
     coordenadas = query_vereda_coordinates(nombre_municipio)
@@ -352,7 +347,7 @@ if __name__ == "__main__":
         print(f"Coordenadas de la vereda '{nombre_vereda}': {coordenadas}")
         #print(f"Coordenadas del municipio '{nombre_municipio}': {coordenadas}")
     else:
-        print("No se encontraron las coordenadas de la vereda especificada.")
+        print("No se encontraron las coordenadas de la vereda especificada.")'''
     
 
 
