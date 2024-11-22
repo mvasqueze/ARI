@@ -38,6 +38,8 @@ def validate_coordinates(dataframe, antioquia_municipios):
 def data_verification(row):
     x, y = row["x"], row["y"]
     id = row["ObjectID"]
+    print("---------------------------------------------------------------------")
+    print(f"Procesando object id {id}")
     invalid_states = [None, "", "0.0", "nan"]
     
     # Check if x or y is invalid
