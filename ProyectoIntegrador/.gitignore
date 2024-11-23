@@ -1,0 +1,6 @@
+/mcda
+/prep-data/mcda
+/prep-data/*.csv
+/.env
+/*.csv
+*.pyc
