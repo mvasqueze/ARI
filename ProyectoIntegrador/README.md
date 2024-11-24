@@ -22,7 +22,7 @@ Este README proporciona las instrucciones necesarias para configurar y ejecutar 
 3. Ingresa a la carpeta `Proyecto integrador`:
 
    ```bash
-   cd "Proyecto integrador"
+   cd "ProyectoIntegrador"
    ```
 
 ---
